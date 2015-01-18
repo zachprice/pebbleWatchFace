@@ -95,6 +95,14 @@ static void update_date() {
   text_layer_set_text(dates, buffer);
 }
 
+static void update_weather_date() {
+  time_t temp = time(NULL); 
+  static char buffer[] = "Loading text";
+  struct tm *tick_time = localtime(&temp);
+  strftime(buffer, sizeof(buffer), "%a. %d", tick_time);
+  text_layer_set_text(day, buffer);
+}
+
 
 static void main_window_load(Window *window) {
   // Create time TextLayer
@@ -147,7 +155,7 @@ static void weather_load(Window *weather) {
   text_layer_set_text(clocks, "Loading..");
   
   //Date Layer
-  day = text_layer_create(GRect(0, 84, 144, 84));
+  day = text_layer_create(GRect(-27, 125, 144, 84));
   text_layer_set_background_color(day, GColorClear);
   text_layer_set_text_color(day, GColorBlack);
   text_layer_set_text(day, "Loading..");
@@ -172,6 +180,7 @@ static void weather_load(Window *weather) {
   layer_add_child(window_get_root_layer(weather), text_layer_get_layer(condition));
   
   update_weather_time();
+  update_weather_date();
 }
 
 static void weather_unload(Window *weather) {
